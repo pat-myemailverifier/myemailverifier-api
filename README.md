@@ -6,7 +6,7 @@ Real-time email verification API to validate email addresses instantly and incre
 
 - **Real-time Email Verification** - Verify emails instantly with 99.9% accuracy
 - **Bulk Email Validation** - Upload CSV/TXT files for bulk verification
-- **ElasticSearch Caching** - 70-90% faster response times with 55M+ cached emails
+- **Intelligent Caching** - Lightning-fast response times with smart caching system
 - **Catch-all Detection** - Identify catch-all email addresses
 - **Role-based Email Detection** - Detect role-based emails (support@, info@, admin@, etc.)
 - **Disposable Domain Detection** - Identify temporary/disposable email addresses

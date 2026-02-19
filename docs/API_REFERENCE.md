@@ -337,9 +337,9 @@ Once `ready_for_download` is `1` and `status` is `finished`:
 5. **API Key Security**: Never expose API keys in client-side code or public repositories
 6. **Timeout Settings**: Set appropriate timeouts (10-30 seconds recommended)
 
-## ElasticSearch Caching
+## Intelligent Caching System
 
-MyEmailVerifier uses ElasticSearch caching with **55M+ verified emails** for lightning-fast responses:
+MyEmailVerifier uses an intelligent caching system with **millions of verified emails** for lightning-fast responses:
 
 - **Cache Hit**: < 100ms response time
 - **Cache Miss**: 3-30 seconds (full SMTP verification)

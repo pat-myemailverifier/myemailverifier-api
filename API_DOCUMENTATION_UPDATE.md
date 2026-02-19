@@ -148,8 +148,8 @@ Response:
 
 ## Key Features Documented
 
-### 1. ElasticSearch Caching
-- **55M+ verified emails** cached in ElasticSearch
+### 1. Intelligent Caching
+- **Millions of verified emails** cached for instant results
 - **< 100ms response time** for cached emails
 - **70-90% cache hit rate** for typical use cases
 - Automatic cache population on new verifications
@@ -291,7 +291,7 @@ All examples have been tested against the production API and work correctly with
 - Code examples tested and verified working
 - Response formats match actual API responses
 - Bulk verification workflow documented with complete examples
-- ElasticSearch caching features documented (55M+ emails cached)
+- Intelligent caching system for fast responses
 
 ---
 
