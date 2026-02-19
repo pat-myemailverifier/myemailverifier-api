@@ -1,0 +1,112 @@
+# .gitignore
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+.env.prod
+.env.test
+
+# Dependencies
+node_modules/
+vendor/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+env/
+
+# IDE and Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.project
+.classpath
+.c9/
+*.sublime-project
+*.sublime-workspace
+
+# Build and Output
+dist/
+build/
+*.min.js
+*.min.css
+.next/
+out/
+
+# Testing
+.coverage
+.pytest_cache/
+htmlcov/
+.nyc_output/
+coverage/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Package managers
+package-lock.json
+yarn.lock
+composer.lock
+Pipfile.lock
+
+# Cache
+.cache/
+.next/
+.nuxt/
+dist/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE specific
+*.iml
+*.iws
+*.ipr
+
+# Temp files
+tmp/
+temp/
+*.tmp
+*.bak
+*.backup
+
+# Config files with secrets
+config.local.js
+config.local.json
+secrets.json
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+.mongo_shell_history
+
+# Compiled files
+*.class
+*.o
+*.so
+
+# Certificates
+*.pem
+*.key
+*.cert
+
+# Results and exports
+results/
+exports/
+output/
+*.csv
+test_results.json
