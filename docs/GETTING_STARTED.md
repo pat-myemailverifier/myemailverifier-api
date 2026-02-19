@@ -14,8 +14,11 @@ This guide will help you get up and running with the MyEmailVerifier API in minu
 1. Visit [client.myemailverifier.com](https://client.myemailverifier.com)
 2. Click "Sign Up" or "Get Started"
 3. Create your account and verify your email
-4. Navigate to Dashboard → API Settings
-5. Copy your API key (keep it secure!)
+4. **Verify your phone number** (required for 100 free daily credits)
+5. Navigate to Dashboard → API Settings
+6. Copy your API key (keep it secure!)
+
+**Free Credits:** After phone verification, you'll receive 100 free credits daily for fair usage testing and development.
 
 ## Step 2: Choose Your Endpoint
 
@@ -229,11 +232,36 @@ print(f"Remaining credits: {credits}")
 
 ### Rate Limiting
 
-- **Free Plan**: 10 requests/minute
-- **Paid Plans**: Higher limits based on your plan
-- **Enterprise**: Custom limits available
+- **All Plans**: 30 requests/minute (default)
+- **Custom Limits**: Available based on your subscription
+- **Enterprise**: Unlimited with custom configurations
 
-## Step 7: Next Steps
+## Step 10: Understanding the Credit System
+
+### Free Daily Credits
+- **100 credits per day** after phone verification
+- Resets every 24 hours
+- Perfect for testing and small projects
+- Requires one-time phone verification for fair usage
+
+### Monthly Subscription Credits
+- **Credits accumulate** - they add up each month
+- **Never expire** - unused credits carry over
+- **No reset** - keep all your credits forever
+- Example: 1,000 credits/month plan
+  - Month 1: Use 600, balance = 400
+  - Month 2: +1,000 added, balance = 1,400
+  - Month 3: Use 1,000, balance = 400
+
+### Pay-as-you-go Credits
+- Purchase credits anytime
+- Never expire
+- No monthly commitment
+- Great for occasional use
+
+**Tip:** Check your credit balance regularly using the `/verifier/getcredits` endpoint!
+
+## Step 11: Next Steps
 
 - Explore the [API Reference](API_REFERENCE.md)
 - Check out [Integration Examples](../examples/)
@@ -252,8 +280,11 @@ A: Domain validation, MX record check, and SMTP-level verification.
 **Q: Can I verify batches of emails?**
 A: Yes! Use our bulk verification endpoint for multiple emails.
 
-**Q: Do you offer webhooks?**
-A: Yes! See integration docs for webhook setup.
+**Q: Do my credits expire?**
+A: No! Subscription and pay-as-you-go credits never expire. Only free daily credits reset every 24 hours.
+
+**Q: Why do I need phone verification?**
+A: Phone verification ensures fair usage and prevents abuse, allowing us to offer generous free daily credits to legitimate users.
 
 ## Need Help?
 

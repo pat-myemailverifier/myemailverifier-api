@@ -12,9 +12,10 @@ A: MyEmailVerifier is a real-time email verification service that validates emai
 
 A: 
 1. Sign up at [MyEmailVerifier.com](https://myemailverifier.com)
-2. Get your API key from the dashboard
-3. Choose your integration method (API, SDK, or free tools)
-4. Start verifying emails!
+2. Verify your phone number (required for free daily credits)
+3. Get your API key from the dashboard under API Settings
+4. Choose your integration method (API, SDK, or free tools)
+5. Start verifying emails!
 
 ### Q: Do I need to code to use MyEmailVerifier?
 
@@ -23,13 +24,16 @@ A: No! We offer:
 - **API** - For developers
 - **Integrations** - With popular platforms (Zapier, Make, etc.)
 
-### Q: Is there a free trial?
+### Q: Is there a free plan?
 
 A: Yes! Free plan includes:
-- 50 verifications/month
+- **100 credits per day** (requires phone verification for fair usage)
+- Access to all API endpoints
 - Single email verifier
-- Bulk upload (100 emails)
+- Bulk upload capability
 - Domain validation tool
+
+**Note:** Phone verification is required to prevent abuse and ensure fair usage for all users.
 
 ---
 
@@ -144,29 +148,52 @@ Some may slip through - recommend secondary confirmation for critical use.
 ### Q: What's included in the free plan?
 
 A: 
-- 50 verifications/month
+- **100 credits per day** (requires phone verification)
+- Access to all API endpoints
 - Single email verifier
-- Bulk upload (100 emails/month)
-- Domain validator (10/day)
-- Catch-all detector (10/day)
-- No API access
+- Bulk upload capability
+- Domain validator
+- Catch-all detector
+- Full API access
+
+**Note:** Phone verification is required for fair usage and abuse prevention.
+
+### Q: How do subscription credits work?
+
+A: **Credits are accumulative** - they add up each month and never expire:
+- Monthly subscription adds credits to your balance
+- Unused credits carry over to next month
+- No reset or "use it or lose it" policy
+- Example: 1,000 credits/month plan:
+  - Month 1: Use 500, balance = 500
+  - Month 2: Add 1,000, balance = 1,500
+  - Month 3: Use 2,000, balance = 500
+
+### Q: Do my credits expire?
+
+A: **No!** Credits never expire:
+- Subscription credits accumulate monthly
+- Pay-as-you-go credits never expire
+- Free daily credits renew every 24 hours
 
 ### Q: How much does verification cost?
 
-A: Pricing by plan:
-- **Free**: 50/month free
-- **Starter**: $9/month (1,000/month)
-- **Professional**: $29/month (10,000/month)
-- **Enterprise**: Custom pricing
+A: Pricing options:
+- **Free**: 100 credits/day (phone verification required)
+- **Monthly Plans**: Credits accumulate, never expire
+- **Pay-as-you-go**: Purchase credits anytime, no expiration
+- **Enterprise**: Custom solutions with volume discounts
 
-See our [pricing page](https://myemailverifier.com/pricing)
+See our [pricing page](https://myemailverifier.com/pricing) for current rates.
 
 ### Q: Can I try before buying?
 
 A: Yes! Using the free plan:
-1. Test the service completely free
-2. Verify up to 50 emails/month
-3. Upgrade when ready
+1. Sign up for free
+2. Verify your phone number
+3. Get 100 credits daily
+4. Test the service thoroughly
+5. Upgrade when ready
 
 ### Q: How do I upgrade my plan?
 
@@ -175,14 +202,15 @@ A:
 2. Go to Billing → Plans
 3. Choose your plan
 4. Update payment method
-5. Upgrade is instant!
+5. Credits are added immediately!
 
-### Q: Is there annual billing discount?
+### Q: What happens if I cancel my subscription?
 
-A: Yes! Save **20% on annual plans**:
-- Annual vs Monthly comparison available in Billing section
-- Auto-renewal annually
-- Cancel anytime
+A: 
+- Your existing credits remain in your account
+- You can still use all accumulated credits
+- You'll continue to receive 100 free credits daily (with phone verification)
+- No credits are lost when you cancel
 
 ---
 

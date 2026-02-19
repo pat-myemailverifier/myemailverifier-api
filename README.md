@@ -15,7 +15,8 @@ Real-time email verification API to validate email addresses instantly and incre
 - **API Rate Limiting** - Flexible rate limiting (30 req/min default, customizable)
 - **Multiple Response Formats** - JSON, CSV, and Excel downloads
 - **API Credit System** - Check credits and usage tracking
-- **Free & Paid Plans** - Start free with generous limits
+- **Free Daily Credits** - 100 free credits per day (requires phone verification for fair usage)
+- **Accumulative Credits** - Monthly subscription credits add up, never expire
 
 ## 📋 API Endpoints Overview
 
@@ -220,9 +221,10 @@ Sign up at [MyEmailVerifier](https://myemailverifier.com) to get your free API k
 ## 🚀 Getting Started
 
 1. **Create an Account** - Sign up at [MyEmailVerifier.com](https://myemailverifier.com)
-2. **Get Your API Key** - Found in your dashboard
-3. **Start Verifying** - Use any of our code examples
-4. **Monitor Usage** - Check your dashboard for stats
+2. **Verify Your Phone** - Required for 100 free daily credits (fair usage)
+3. **Get Your API Key** - Found in your dashboard under API Settings
+4. **Start Verifying** - Use any of our code examples
+5. **Monitor Usage** - Check your dashboard for stats and remaining credits
 
 ## 💼 Integrations
 
@@ -238,10 +240,24 @@ MyEmailVerifier supports integrations with popular platforms:
 ## 📈 Plans & Pricing
 
 Choose the plan that fits your needs:
-- **Free**: 50 verifications/month
-- **Starter**: 1,000 verifications/month
-- **Professional**: Unlimited with priority support
-- **Enterprise**: Custom solutions
+
+### Free Plan
+- **100 credits per day** (requires phone verification for fair usage)
+- Access to all API endpoints
+- Perfect for testing and small projects
+
+### Monthly Subscription Plans
+- Credits **add up monthly** (accumulative, never reset)
+- Unused credits carry over to next month
+- Higher credit packages available
+- Priority support on higher tiers
+
+### Pay-as-you-go
+- Purchase credits anytime
+- Credits never expire
+- No monthly commitment
+
+**Note:** All plans use an accumulative credit system - credits are added to your balance each month, not reset.
 
 ## 🆘 Support
 
