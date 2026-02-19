@@ -116,8 +116,7 @@ curl_close($ch);
 - [Getting Started](docs/GETTING_STARTED.md) - Complete setup guide
 - [API Reference](docs/API_REFERENCE.md) - Full API documentation
 - [Authentication](docs/AUTHENTICATION.md) - API key management
-- [Installation](docs/INSTALLATION.md) - Installation instructions
-- [Integrations](docs/INTEGRATIONS.md) - Third-party integrations
+- [Integrations](docs/INTEGRATIONS.md) - Zapier and third-party integrations
 - [Free Tools](docs/FREE_TOOLS.md) - Available free verification tools
 - [Error Codes](docs/ERROR_CODES.md) - API error codes reference
 - [FAQ](docs/FAQ.md) - Frequently asked questions

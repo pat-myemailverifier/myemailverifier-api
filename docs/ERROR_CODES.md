@@ -1,183 +1,339 @@
 # Error Codes Reference
 
-Complete list of error codes and their meanings.
+Complete reference for MyEmailVerifier API responses and status codes.
 
-## Verification Status Codes
+## Email Validation Status
 
-### ✅ Success (Code: 0)
+The API returns a `Status` field with one of these values:
 
-**Status:** Email Verified
-**Meaning:** Email address is valid and verified successfully
-**Action:** Safe to add to mailing list
+### ✅ Valid
 
+**Meaning:** Email address exists and is deliverable
+**Response Example:**
 ```json
 {
-  "error_code": 0,
-  "message": "Email is valid and safe to send",
-  "deliverability": "safe"
+  "Address": "user@example.com",
+  "Status": "Valid",
+  "Diagnosis": "Mailbox Exists and Active",
+  "catch_all": "false",
+  "Role_Based": "false",
+  "Disposable_Domain": "false",
+  "Free_Domain": "false",
+  "Greylisted": "false"
 }
 ```
+**Action:** Safe to send emails to this address
 
 ---
 
-### ❌ Invalid Email (Code: 1)
+### ❌ Invalid
 
-**Status:** Invalid Email
-**Meaning:** Email address format is invalid or doesn't exist
+**Meaning:** Email address doesn't exist or is not deliverable
 **Causes:**
-- Malformed email syntax
+- Mailbox doesn't exist on the domain
 - Domain doesn't exist
-- Invalid characters
-- Email doesn't exist on domain
+- Invalid email format
+- SMTP verification failed
 
-**Action:** Remove from list or prompt user to correct
-
+**Response Example:**
 ```json
 {
-  "error_code": 1,
-  "message": "Email address is invalid",
-  "deliverability": "invalid"
+  "Address": "invalid@example.com",
+  "Status": "Invalid",
+  "Diagnosis": "Mailbox Does Not Exist",
+  "catch_all": "false"
+}
+```
+**Action:** Remove from mailing list or ask user to correct
+
+---
+
+### 🔄 Catch-all
+
+**Meaning:** Domain accepts all emails (can't verify specific mailbox)
+**Causes:**
+- Domain configured with catch-all
+- Server accepts any email to the domain
+- Cannot confirm specific mailbox existence
+
+**Response Example:**
+```json
+{
+  "Address": "anything@example.com",
+  "Status": "Catch-all",
+  "Diagnosis": "Domain uses catch-all configuration",
+  "catch_all": "true"
+}
+```
+**Action:** Accept with caution - may or may not be deliverable
+
+---
+
+### ❓ Unknown
+
+**Meaning:** Verification could not be completed
+**Causes:**
+- Server timeout
+- Greylisting (temporary rejection)
+- Server temporarily unavailable
+- Network issues
+
+**Response Example:**
+```json
+{
+  "Address": "user@example.com",
+  "Status": "Unknown",
+  "Diagnosis": "Server temporarily unavailable",
+  "Greylisted": "true"
+}
+```
+**Action:** Retry verification later or accept with caution
+
+---
+
+## Response Field Details
+
+### catch_all
+- **"true"** - Domain accepts all emails
+- **"false"** - Normal domain configuration
+
+### Role_Based
+- **"true"** - Generic role email (support@, info@, admin@, sales@, etc.)
+- **"false"** - Personal email address
+
+### Disposable_Domain
+- **"true"** - Temporary/disposable email service
+- **"false"** - Legitimate email domain
+
+### Free_Domain
+- **"true"** - Free email provider (Gmail, Yahoo, Hotmail, etc.)
+- **"false"** - Business/custom domain
+
+### Greylisted
+- **"true"** - Server uses greylisting (may need retry)
+- **"false"** - Normal server response
+
+---
+
+## HTTP Status Codes
+
+---
+
+## HTTP Status Codes
+
+### 200 - OK
+**Meaning:** Request successful
+**Response:** Contains verification result
+
+### 400 - Bad Request
+**Meaning:** Invalid request parameters
+**Causes:**
+- Missing email parameter
+- Invalid email format
+- Malformed request
+
+**Response Example:**
+```json
+{
+  "status": false,
+  "message": "Email parameter is required",
+  "error": "INVALID_REQUEST"
 }
 ```
 
 ---
 
-### 🔄 Catch-all Domain (Code: 2)
-
-**Status:** Catch-all Address
-**Meaning:** Domain accepts all emails (catch-all configuration)
+### 401 - Unauthorized
+**Meaning:** Invalid or missing API key
 **Causes:**
-- Domain is configured to accept any email
-- Can't verify if specific email exists
-- Generic catch-all servers
-
-**Action:** Accept with caution or follow up verification
-
-```json
-{
-  "error_code": 2,
-  "message": "Email is a catch-all address",
-  "is_catchall": true,
-  "deliverability": "risky"
-}
-```
-
----
-
-### 👔 Role-Based Email (Code: 3)
-
-**Status:** Role-Based Address
-**Meaning:** Email is a generic role address (support@, info@, admin@, etc.)
-**Causes:**
-- Generic inbox shared by multiple people
-- Department-wide email
-- No specific person assigned
-
-**Action:** Can send but may be less targeted
-
-```json
-{
-  "error_code": 3,
-  "message": "Email is role-based (support@, info@, etc)",
-  "is_role_based": true,
-  "deliverability": "safe"
-}
-```
-
----
-
-### 🌐 Domain Validation Error (Code: 4)
-
-**Status:** Domain Error
-**Meaning:** Domain is invalid or doesn't exist
-**Causes:**
-- Domain doesn't exist
-- Domain is suspended
-- Domain has no MX records
-- DNS lookup failed
-
-**Action:** Invalid domain - remove email
-
-```json
-{
-  "error_code": 4,
-  "message": "Domain validation failed",
-  "domain_valid": false,
-  "deliverability": "invalid"
-}
-```
-
----
-
-### 📧 SMTP Verification Error (Code: 5)
-
-**Status:** SMTP Error
-**Meaning:** SMTP verification failed
-**Causes:**
-- Mail server rejected connection
-- Temporary server error
-- Timeout during verification
-- Server blocked our IP
-
-**Action:** Retry later or mark as unverifiable
-
-```json
-{
-  "error_code": 5,
-  "message": "SMTP verification failed",
-  "smtp_check": false,
-  "deliverability": "risky"
-}
-```
-
----
-
-## API Error Codes
-
-### API Error (Code: 100)
-
-**Status:** API Error
-**Meaning:** General API error
-**Causes:**
-- Server error
-- Request processing failed
-- Internal error
-
-**Response:**
-```json
-{
-  "error_code": 100,
-  "message": "API error",
-  "status": "error"
-}
-```
-
----
-
-### Authentication Error (Code: 101)
-
-**Status:** Authentication Failed
-**Meaning:** API key is invalid, expired, or missing
-**Causes:**
+- API key not provided
 - Invalid API key
 - API key revoked
-- API key expired
-- Missing API key
 
-**Solution:**
-1. Check API key format
-2. Verify key is active in dashboard
-3. Generate new key if needed
-4. Never commit keys to version control
-
-**Response:**
+**Response Example:**
 ```json
 {
-  "error_code": 101,
+  "status": false,
   "message": "Invalid API key",
-  "status": "error"
+  "error": "INVALID_API_KEY"
 }
 ```
+
+**Solution:**
+1. Check API key in your dashboard
+2. Ensure API key is included in request
+3. Generate new key if needed
+
+---
+
+### 403 - Forbidden
+**Meaning:** API key doesn't have permission
+**Causes:**
+- Referer restriction (demo keys)
+- Account suspended
+- Feature not available on plan
+
+**Response Example:**
+```json
+{
+  "status": false,
+  "message": "This API key can only be used from myemailverifier.com website",
+  "error": "UNAUTHORIZED_REFERER"
+}
+```
+
+---
+
+### 429 - Too Many Requests
+**Meaning:** Rate limit exceeded
+**Causes:**
+- Too many requests in time window
+- Default: 30 requests per minute exceeded
+- Restricted key daily limit reached
+
+**Response Example:**
+```json
+{
+  "status": false,
+  "message": "Rate limit exceeded. You can make 30 requests per minute.",
+  "error": "RATE_LIMIT_EXCEEDED"
+}
+```
+
+**Solution:**
+1. Implement rate limiting in your code
+2. Add delays between requests
+3. Upgrade plan for higher limits
+4. Use bulk verification for multiple emails
+
+---
+
+### 500 - Internal Server Error
+**Meaning:** Server-side error
+**Causes:**
+- Temporary server issue
+- Service maintenance
+- Unexpected error
+
+**Response Example:**
+```json
+{
+  "status": false,
+  "message": "Internal server error. Please try again.",
+  "error": "SERVER_ERROR"
+}
+```
+
+**Action:** Retry request after a short delay
+
+---
+
+## Common Error Scenarios
+
+### Insufficient Credits
+```json
+{
+  "status": false,
+  "message": "Insufficient credits. Please purchase more credits.",
+  "error": "INSUFFICIENT_CREDITS"
+}
+```
+**Solution:** Add credits to your account or upgrade plan
+
+---
+
+### Invalid File Format (Bulk Upload)
+```json
+{
+  "status": false,
+  "msg": "Invalid file format. Please upload TXT or CSV file."
+}
+```
+**Solution:** Use only .txt or .csv files for bulk verification
+
+---
+
+### File Upload Error
+```json
+{
+  "status": false,
+  "msg": "File upload failed. Please try again."
+}
+```
+**Solution:** 
+- Check file size (max 10MB)
+- Ensure file is properly formatted
+- Retry upload
+
+---
+
+## Best Practices
+
+### Error Handling
+```python
+try:
+    response = verify_email(email)
+    
+    if response.status_code == 200:
+        result = response.json()
+        
+        if result['Status'] == 'Valid':
+            # Email is valid
+            pass
+        elif result['Status'] == 'Invalid':
+            # Email is invalid
+            pass
+        elif result['Status'] == 'Catch-all':
+            # Handle catch-all
+            pass
+            
+    elif response.status_code == 429:
+        # Rate limit - wait and retry
+        time.sleep(60)
+        
+    elif response.status_code == 401:
+        # Invalid API key
+        raise Exception('API key invalid')
+        
+except Exception as e:
+    # Handle error
+    log_error(e)
+```
+
+### Retry Logic
+```python
+import time
+
+def verify_with_retry(email, max_retries=3):
+    for attempt in range(max_retries):
+        try:
+            response = verify_email(email)
+            
+            if response.status_code == 429:
+                # Rate limited - wait exponentially
+                wait_time = (2 ** attempt) * 60
+                time.sleep(wait_time)
+                continue
+                
+            return response
+            
+        except Exception as e:
+            if attempt == max_retries - 1:
+                raise
+            time.sleep(5)
+    
+    return None
+```
+
+---
+
+## Support
+
+If you encounter errors not listed here:
+- 📧 Email: support@myemailverifier.com
+- 💬 Live chat on our website
+- 📖 Check API logs in your dashboard
+- 🐛 Report on GitHub Issues
 
 ---
 

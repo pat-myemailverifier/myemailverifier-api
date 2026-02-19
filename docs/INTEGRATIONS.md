@@ -1,313 +1,502 @@
 # Third-Party Integrations
 
-Integrate MyEmailVerifier with popular platforms and tools.
+Integrate MyEmailVerifier with 2000+ apps via Zapier or use our REST API for custom integrations.
 
-## Email Marketing Platforms
+## Zapier Integration (Recommended)
 
-### Mailchimp Integration
+MyEmailVerifier's official Zapier app connects with **2000+ platforms** including:
+- Email marketing tools (Mailchimp, SendGrid, ActiveCampaign, etc.)
+- CRM systems (Salesforce, HubSpot, Pipedrive, etc.)
+- Form builders (Typeform, Gravity Forms, JotForm, etc.)
+- E-commerce platforms (Shopify, WooCommerce, etc.)
+- Spreadsheets (Google Sheets, Airtable, Excel, etc.)
+- And many more!
 
-Verify email lists before uploading to Mailchimp:
+### How to Connect
 
-1. Export your email list from MyEmailVerifier
-2. Import into Mailchimp
-3. Use our [free bulk verification tool](FREE_TOOLS.md)
+1. **Log in to Zapier** at [zapier.com](https://zapier.com)
+2. **Search for "MyEmailVerifier"** in the app directory
+3. **Connect your account** using your MyEmailVerifier API key
+4. **Create Zaps** to automate email verification
 
-**Webhook Integration:**
+### Popular Zap Examples
+
+#### Verify Emails from Google Forms
 ```
-Add webhook: https://api.myemailverifier.com/hooks/mailchimp
-```
-
-### Zapier Integration
-
-Automate email verification with Zapier:
-
-1. Create a Zapier Zap
-2. Trigger: When new subscriber added
-3. Action: MyEmailVerifier - Verify Email
-4. Map email field
-5. Use results to tag/segment subscribers
-
-**Configuration:**
-```
-Trigger: Mailchimp - New Subscriber
+Trigger: New Google Form Response
 Action: MyEmailVerifier - Verify Email
-Filter: If valid, continue; if invalid, stop
+Filter: Only proceed if Status = "Valid"
+Action: Add to Google Sheets
 ```
 
-### Make (Integromat)
+#### Clean Mailchimp Lists
+```
+Trigger: New Mailchimp Subscriber
+Action: MyEmailVerifier - Verify Email
+Filter: If Status = "Invalid", unsubscribe
+```
 
-Automate workflows:
+####  Validate Salesforce Leads
+```
+Trigger: New Salesforce Lead
+Action: MyEmailVerifier - Verify Email
+Action: Update Lead custom field with validation status
+```
 
-1. Create new scenario in Make
-2. Add MyEmailVerifier module
-3. Choose "Verify Email" operation
-4. Map email input
-5. Add conditional logic for results
+#### Filter HubSpot Contacts
+```
+Trigger: New HubSpot Contact
+Action: MyEmailVerifier - Verify Email
+Action: Tag contact based on email status
+```
+
+#### Verify Shopify Customers
+```
+Trigger: New Shopify Customer
+Action: MyEmailVerifier - Verify Email
+Action: Tag customer if email is invalid
+```
 
 ---
 
-## CRM Platforms
+## Direct REST API Integration
 
-### Salesforce
+For custom integrations, use our REST API with any platform that supports HTTP requests.
 
-Use custom flow or formula field with webhook calls:
+### Email Service Providers
 
-```
-Flow: Email Verification on Lead Creation
-1. Create lead
-2. HTTP Request to MyEmailVerifier API
-3. Update Lead.Email_Status field with result
-```
+#### Mailchimp
+```python
+# Verify before adding subscriber
+result = requests.get(
+    'https://api.myemailverifier.com/api/validate_single.php',
+    params={'apikey': API_KEY, 'email': email}
+).json()
 
-### HubSpot
-
-HubSpot Workflow Setup:
-
-1. Go to Automation → Workflows
-2. Create enrollment trigger
-3. Add custom action calling MyEmailVerifier API
-4. Update contact property with verification result
-
-### Pipedrive
-
-Verify emails in contact creation pipeline:
-
-1. Use Pipedrive API integration
-2. Call MyEmailVerifier when new contact added
-3. Store verification status in custom field
-4. Segment contacts based on validation
-
----
-
-## Bulk Verification Services
-
-### Google Sheets Add-on
-
-Coming soon! Check back for official Google Sheets integration.
-
-**Manual Integration:**
-```
-Use IMPORTJSON() function to call API
-=IMPORTJSON("https://api.myemailverifier.com/verify?email=" & A1)
+if result['Status'] == 'Valid':
+    mailchimp.lists.add_member(list_id, {'email_address': email})
 ```
 
-### Airtable Integration
+#### SendGrid
+```javascript
+const verifyAndSend = async (email) => {
+    const verify = await axios.get('https://api.myemailverifier.com/api/validate_single.php', {
+        params: { apikey: API_KEY, email: email }
+    });
+    
+    if (verify.data.Status === 'Valid') {
+        await sendgrid.send({ to: email, from: 'noreply@example.com', ... });
+    }
+};
+```
 
-Using Airtable Automations:
+#### ActiveCampaign
+```php
+$result = file_get_contents(
+    "https://api.myemailverifier.com/api/validate_single.php?apikey=$apiKey&email=$email"
+);
+$data = json_decode($result, true);
 
-1. Create base with email field
-2. Set up automation trigger
-3. Use webhook to MyEmailVerifier API
-4. Write results back to Airtable
-
----
-
-## Webhook Integrations
-
-### Setting Up Webhooks
-
-1. Go to Dashboard → Webhooks
-2. Click "Add Webhook"
-3. Enter endpoint URL
-4. Select events to receive
-5. Test the webhook
-
-### Supported Events
-
-- `email.verified` - Email verification completed
-- `batch.completed` - Batch verification completed
-- `batch.failed` - Batch verification failed
-- `limit.reached` - Monthly limit reached
-
-### Webhook Payload
-
-```json
-{
-  "event_type": "email.verified",
-  "timestamp": "2024-02-19T10:30:00Z",
-  "data": {
-    "email": "user@example.com",
-    "is_valid": true,
-    "deliverability": "safe",
-    "error_code": 0
-  }
+if ($data['Status'] === 'Valid') {
+    // Add to ActiveCampaign
 }
 ```
 
----
+### CRM Platforms
 
-## E-Commerce Platforms
+#### Salesforce
+Apex HTTP Callout:
+```apex
+Http http = new Http();
+HttpRequest req = new HttpRequest();
+req.setEndpoint('https://api.myemailverifier.com/api/validate_single.php?apikey=' + apiKey + '&email=' + email);
+req.setMethod('GET');
+HttpResponse res = http.send(req);
 
-### Shopify Integration
+Map<String, Object> result = (Map<String, Object>) JSON.deserializeUntyped(res.getBody());
+String status = (String) result.get('Status');
 
-Verify customer emails on signup:
-
-```javascript
-// In Shopify theme / custom app
-fetch('https://api.myemailverifier.com/verify', {
-  method: 'POST',
-  body: JSON.stringify({
-    email: customerEmail,
-    api_key: MYEMAILVERIFIER_API_KEY
-  })
-})
-.then(response => response.json())
-.then(data => {
-  if (data.is_valid) {
-    // Complete checkout
-  } else {
-    // Show error and ask for confirmation
-  }
-})
+// Update Lead/Contact field
+lead.Email_Status__c = status;
+update lead;
 ```
 
-### WooCommerce Integration
+#### HubSpot
+Workflow webhook:
+```
+Webhook URL: https://api.myemailverifier.com/api/validate_single.php
+Method: GET
+Parameters:
+  - apikey: YOUR_API_KEY
+  - email: {{contact.email}}
+```
 
-```php
-<?php
-// In WooCommerce checkout validation hook
-add_action('woocommerce_checkout_process', function() {
-    $email = $_POST['post_data']['billing_email'];
+#### Pipedrive
+```python
+def verify_pipedrive_contact(person_id):
+    # Get contact from Pipedrive
+    person = pipedrive.get_person(person_id)
+    email = person['email']
     
-    $response = wp_remote_post('https://api.myemailverifier.com/verify', [
-        'body' => json_encode([
-            'email' => $email,
-            'api_key' => MYEMAILVERIFIER_API_KEY
-        ]),
-        'headers' => ['Content-Type' => 'application/json']
-    ]);
+    # Verify email
+    result = requests.get(
+        'https://api.myemailverifier.com/api/validate_single.php',
+        params={'apikey': API_KEY, 'email': email}
+    ).json()
     
-    $data = json_decode(wp_remote_retrieve_body($response), true);
+    # Update custom field
+    pipedrive.update_person(person_id, {
+        'email_status': result['Status']
+    })
+```
+
+---
+
+## E-commerce Platforms
+
+### Shopify
+Theme/app checkout validation:
+```javascript
+document.getElementById('checkout-email').addEventListener('blur', async function() {
+    const email = this.value;
     
-    if (!$data['is_valid']) {
-        wc_add_notice('Invalid email address', 'error');
+    const response = await fetch(
+        `https://api.myemailverifier.com/api/validate_single.php?apikey=${API_KEY}&email=${email}`
+    );
+    const result = await response.json();
+    
+    if (result.Status !== 'Valid') {
+        alert('Please enter a valid email address');
     }
 });
-?>
+```
+
+### WooCommerce
+WordPress validation hook:
+```php
+add_action('woocommerce_checkout_process', 'verify_checkout_email');
+
+function verify_checkout_email() {
+    $email = $_POST['billing_email'];
+    $apiKey = get_option('myemailverifier_api_key');
+    
+    $response = file_get_contents(
+        "https://api.myemailverifier.com/api/validate_single.php?apikey=$apiKey&email=$email"
+    );
+    $result = json_decode($response, true);
+    
+    if ($result['Status'] !== 'Valid') {
+        wc_add_notice('Please enter a valid email address.', 'error');
+    }
+}
+```
+
+### Magento
+```php
+// Observer for customer registration
+public function execute(\Magento\Framework\Event\Observer $observer)
+{
+    $customer = $observer->getEvent()->getCustomer();
+    $email = $customer->getEmail();
+    
+    $result = $this->verifyEmail($email);
+    
+    if ($result['Status'] !== 'Valid') {
+        throw new \Magento\Framework\Exception\LocalizedException(
+            __('Please enter a valid email address.')
+        );
+    }
+}
 ```
 
 ---
 
 ## Form Builders
 
-### Typeform Integration
+### Gravity Forms (WordPress)
+```php
+add_filter('gform_field_validation', 'verify_email_field', 10, 4);
 
-Add real-time validation to Typeform:
+function verify_email_field($result, $value, $form, $field) {
+    if ($field->type == 'email' && !$result['is_valid']) {
+        return $result; // Already invalid
+    }
+    
+    if ($field->type == 'email') {
+        $apiKey = get_option('myemailverifier_api_key');
+        $response = file_get_contents(
+            "https://api.myemailverifier.com/api/validate_single.php?apikey=$apiKey&email=$value"
+        );
+        $data = json_decode($response, true);
+        
+        if ($data['Status'] !== 'Valid') {
+            $result['is_valid'] = false;
+            $result['message'] = 'Please enter a valid email address.';
+        }
+    }
+    
+    return $result;
+}
+```
 
-1. Create Typeform with email field
-2. Use Zapier as middleware
-3. Connect to MyEmailVerifier
-4. Route based on validation result
+### Typeform
+Use webhooks to verify submissions on your server.
 
-### JotForm Integration
-
-Using webhooks in JotForm:
-
-1. In JotForm editor, add email field
-2. Go to Settings → Integration
-3. Add custom webhook to MyEmailVerifier
-4. When form submitted, verify email in real-time
+### JotForm
+Add webhook integration in Form Settings → Integrations.
 
 ---
 
-## Communication Platforms
+## Development Frameworks
 
-### Twilio Integration
+### Laravel (PHP)
+```php
+// Service class
+namespace App\Services;
 
-Verify email before sending SMS:
+use Illuminate\Support\Facades\Http;
 
+class EmailVerifier
+{
+    public function verify($email)
+    {
+        $response = Http::get('https://api.myemailverifier.com/api/validate_single.php', [
+            'apikey' => config('services.myemailverifier.api_key'),
+            'email' => $email
+        ]);
+        
+        return $response->json();
+    }
+}
+
+// Usage in controller
+$result = app(EmailVerifier::class)->verify($email);
+if ($result['Status'] === 'Valid') {
+    // Proceed
+}
+```
+
+### Django (Python)
 ```python
-from twilio.rest import Client
+# utils/email_verifier.py
 import requests
+from django.conf import settings
 
-def verify_and_sends_sms(phone, email):
-    # Verify email
-    verify_response = requests.post(
-        'https://api.myemailverifier.com/verify',
-        json={'email': email, 'api_key': API_KEY}
+def verify_email(email):
+    response = requests.get(
+        'https://api.myemailverifier.com/api/validate_single.php',
+        params={
+            'apikey': settings.MYEMAILVERIFIER_API_KEY,
+            'email': email
+        }
     )
+    return response.json()
+
+# Usage in views
+from utils.email_verifier import verify_email
+
+result = verify_email(request.POST['email'])
+if result['Status'] == 'Valid':
+    # Proceed
+```
+
+### Express.js (Node.js)
+```javascript
+// services/emailVerifier.js
+const axios = require('axios');
+
+async function verifyEmail(email) {
+    const response = await axios.get('https://api.myemailverifier.com/api/validate_single.php', {
+        params: {
+            apikey: process.env.MYEMAILVERIFIER_API_KEY,
+            email: email
+        }
+    });
+    return response.data;
+}
+
+module.exports = { verifyEmail };
+
+// Usage in routes
+const { verifyEmail } = require('./services/emailVerifier');
+
+app.post('/signup', async (req, res) => {
+    const result = await verifyEmail(req.body.email);
+    if (result.Status === 'Valid') {
+        // Proceed with signup
+    }
+});
+```
+
+### Ruby on Rails
+```ruby
+# app/services/email_verifier.rb
+class EmailVerifier
+  def self.verify(email)
+    require 'net/http'
+    require 'json'
     
-    if verify_response.json()['is_valid']:
-        # Send SMS
-        client = Client(account_sid, auth_token)
-        client.messages.create(
-            body="Email verified successfully!",
-            from_=TWILIO_PHONE,
-            to=phone
-        )
+    uri = URI('https://api.myemailverifier.com/api/validate_single.php')
+    params = { 
+      apikey: ENV['MYEMAILVERIFIER_API_KEY'], 
+      email: email 
+    }
+    uri.query = URI.encode_www_form(params)
+    
+    response = Net::HTTP.get_response(uri)
+    JSON.parse(response.body)
+  end
+end
+
+# Usage in controller
+result = EmailVerifier.verify(params[:email])
+if result['Status'] == 'Valid'
+  # Proceed
+end
 ```
 
 ---
 
-## Analytics & Monitoring
+## Real-time Form Validation
 
-### Mixpanel Integration
-
-Track verification events:
-
+### JavaScript (Client-side)
 ```javascript
-import Mixpanel from 'mixpanel-browser';
-
-Mixpanel.init('PROJECT_TOKEN');
-
-const verifyEmail = async (email) => {
-    const response = await fetch('https://api.myemailverifier.com/verify', {
-        method: 'POST',
-        body: JSON.stringify({
-            email: email,
-            api_key: API_KEY
-        })
-    });
+document.getElementById('email').addEventListener('blur', async function() {
+    const email = this.value;
+    const statusDiv = document.getElementById('email-status');
     
-    const data = await response.json();
+    if (!email) return;
     
-    Mixpanel.track('Email Verified', {
-        email: email,
-        is_valid: data.is_valid,
-        deliverability: data.deliverability
-    });
-};
+    statusDiv.textContent = 'Verifying...';
+    
+    try {
+        const response = await fetch(
+            `https://api.myemailverifier.com/api/validate_single.php?apikey=${API_KEY}&email=${email}`
+        );
+        const result = await response.json();
+        
+        if (result.Status === 'Valid') {
+            statusDiv.textContent = '✓ Email verified';
+            statusDiv.className = 'success';
+        } else if (result.Status === 'Invalid') {
+            statusDiv.textContent = '✗ Invalid email';
+            statusDiv.className = 'error';
+        } else {
+            statusDiv.textContent = '⚠ ' + result.Diagnosis;
+            statusDiv.className = 'warning';
+        }
+    } catch (error) {
+        statusDiv.textContent = 'Verification failed';
+        statusDiv.className = 'error';
+    }
+});
 ```
 
-### Segment Integration
-
+### jQuery
 ```javascript
-analytics.track('Email Verified', {
-  email: email,
-  is_valid: is_valid,
-  deliverability: deliverability,
-  verification_time: verification_time
+$('#email').on('blur', function() {
+    var email = $(this).val();
+    
+    $.get('https://api.myemailverifier.com/api/validate_single.php', {
+        apikey: API_KEY,
+        email: email
+    }, function(result) {
+        if (result.Status === 'Valid') {
+            $('#email-status').html('✓ Email verified').addClass('success');
+        } else {
+            $('#email-status').html('✗ Invalid email').addClass('error');
+        }
+    });
 });
 ```
 
 ---
 
-## Custom Integrations
+## Best Practices
 
-### Using Our API
+### 1. Cache Results
+Avoid verifying the same email multiple times:
+```python
+from functools import lru_cache
 
-For custom integrations, use our REST API:
+@lru_cache(maxsize=10000)
+def verify_email_cached(email):
+    return verify_email(email)
+```
 
-- **Base URL:** https://api.myemailverifier.com
-- **Documentation:** [API Reference](API_REFERENCE.md)
-- **Code Examples:** [Examples Directory](../examples/)
+### 2. Async Processing
+For bulk verification, use background jobs:
+```python
+# Celery task
+@celery.task
+def verify_email_async(email):
+    result = verify_email(email)
+    update_user_status(email, result['Status'])
+```
 
-### Webhook Testing
+### 3. Error Handling
+Always handle API errors gracefully:
+```javascript
+try {
+    const result = await verifyEmail(email);
+    // Process result
+} catch (error) {
+    if (error.response?.status === 429) {
+        // Rate limited - retry after delay
+        await sleep(60000);
+        return verifyEmail(email);
+    } else if (error.response?.status === 401) {
+        // Invalid API key
+        console.error('Invalid API key');
+    }
+    // Fallback behavior
+    return { Status: 'Unknown' };
+}
+```
 
-Use RequestBin for testing webhooks:
-1. Create bin at https://requestbin.com
-2. Add webhook URL in MyEmailVerifier dashboard
-3. Verify payload format
+### 4. Rate Limiting
+Respect API rate limits (default 30 req/min):
+```python
+import time
+from threading import Lock
+
+class RateLimiter:
+    def __init__(self, max_calls=30, period=60):
+        self.max_calls = max_calls
+        self.period = period
+        self.calls = []
+        self.lock = Lock()
+    
+    def __call__(self, func):
+        def wrapper(*args, **kwargs):
+            with self.lock:
+                now = time.time()
+                self.calls = [c for c in self.calls if c > now - self.period]
+                
+                if len(self.calls) >= self.max_calls:
+                    sleep_time = self.period - (now - self.calls[0])
+                    time.sleep(sleep_time)
+                
+                self.calls.append(time.time())
+                return func(*args, **kwargs)
+        return wrapper
+
+@RateLimiter(max_calls=30, period=60)
+def verify_email(email):
+    # API call
+    pass
+```
 
 ---
 
-## Support for Integrations
+## Support & Resources
 
-- 📧 Email: integrations@myemailverifier.com
-- 💬 Discord: [Community Server](#)
-- 📖 API Docs: [API Reference](API_REFERENCE.md)
-- 🐛 GitHub: [Report Integration Issues](#)
+- **Zapier App**: Search "MyEmailVerifier" in Zapier app directory
+- **API Reference**: [API Documentation](API_REFERENCE.md)
+- **Code Examples**: See [examples](../examples/) folder
+- **Support Email**: support@myemailverifier.com
+- **Live Chat**: Available on our website
 
 ---
 
-More integrations coming soon! If you need a specific integration, please let us know.
+**Connect MyEmailVerifier with 2000+ apps via Zapier or build custom integrations with our REST API!**
