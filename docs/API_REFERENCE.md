@@ -345,6 +345,166 @@ MyEmailVerifier uses an intelligent caching system with **millions of verified e
 
 The cache automatically updates when verifying new emails, benefiting all users.
 
+---
+
+## Deep Catch-All API
+
+Score catch-all email addresses to estimate whether a real mailbox is active.
+
+**Base URL:** `https://client.myemailverifier.com`  
+**Auth:** API key in URL path  
+**Credit cost:** 5 credits per email scored
+
+### Endpoints
+
+| Method | URL | Description | Credits |
+|--------|-----|-------------|---------|
+| `GET`  | `/catchall/score/{email}/{apikey}` | Score a single email (synchronous) | 5 |
+| `POST` | `/catchall/upload/{apikey}` | Upload CSV/TXT for batch scoring | 5 per email |
+| `GET`  | `/catchall/status/{apikey}/{job_id}` | Poll batch job status | 0 |
+| `GET`  | `/catchall/jobs/{apikey}` | List all batch jobs | 0 |
+| `GET`  | `/catchall/download/{apikey}/{job_id}` | Download scored results CSV | 0 |
+
+### Single Score — Example
+
+```bash
+curl "https://client.myemailverifier.com/catchall/score/john@acme.com/YOUR_API_KEY"
+```
+
+```json
+{
+  "status": true,
+  "email": "john@acme.com",
+  "score": 75,
+  "verdict": "high_probability",
+  "exists": true
+}
+```
+
+### Verdict Reference
+
+| Verdict | Score | Meaning |
+|---------|-------|---------|
+| `high_probability` | ≥ 50 | Strong signals — likely a real, active mailbox |
+| `low_probability` | < 50 | Weak or missing signals — treat with caution |
+| `avoid_send` | any | MX IP found on spam blacklist — do not send |
+
+### Batch Upload — Example
+
+```bash
+curl -X POST "https://client.myemailverifier.com/catchall/upload/YOUR_API_KEY" \
+  -F "file=@emails.csv"
+```
+
+Response: `{ "status": true, "job_id": 42, "total_emails": 500, "credits_deducted": 2500, "credits_remaining": 7500 }`
+
+Poll status: `GET /catchall/status/YOUR_API_KEY/42`  
+Download result: `GET /catchall/download/YOUR_API_KEY/42`
+
+---
+
+## Lead Generation API
+
+Search for verified business contacts and reveal email addresses and phone numbers.
+
+**Base URL:** `https://client.myemailverifier.com`  
+**Auth:** API key in URL path
+
+### Credit Costs
+
+| Action | Credits |
+|--------|---------|
+| Search (prompt or LinkedIn mode) | 5 per search |
+| Reveal contact (first time) | 10 per reveal |
+| Re-reveal same token within 24 h | Free |
+| Save / List / Delete leads | Free |
+
+### Endpoints
+
+| Method | URL | Description |
+|--------|-----|-------------|
+| `POST` | `/leads/search/{apikey}` | Search by prompt or LinkedIn fields |
+| `POST` | `/leads/reveal/{apikey}` | Reveal full contact by token |
+| `POST` | `/leads/save/{apikey}` | Save/bookmark a revealed lead |
+| `GET`  | `/leads/saved/{apikey}` | List saved leads |
+| `DELETE` | `/leads/saved/{apikey}/{lead_id}` | Delete a saved lead |
+
+### How it works
+
+1. **Search** → get leads with masked email + `email_token` (5 credits)
+2. **Reveal** → pass `email_token` → get plain email + phone (10 credits)
+3. **Save** → bookmark the revealed contact (free)
+
+### Search — Prompt Mode
+
+```bash
+curl -X POST "https://client.myemailverifier.com/leads/search/YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"prompt": "CTO at fintech companies in Mumbai"}'
+```
+
+```json
+{
+  "status": true,
+  "total": 5,
+  "query": "CTO at fintech companies in Mumbai",
+  "credits_remaining": 4995,
+  "data": [
+    {
+      "name": "Rahul Sharma",
+      "title": "Chief Technology Officer",
+      "company": "PayFast India",
+      "location": "Mumbai, India",
+      "masked_email": "r*****@payfast.in",
+      "email_token": "eyJ...",
+      "masked_phone": "+91 *****3210",
+      "phone_token": "eyJ...",
+      "linkedin_url": "https://linkedin.com/in/rahul-sharma-payfast",
+      "source": "linkedin"
+    }
+  ]
+}
+```
+
+### Search — LinkedIn Finder Mode
+
+```bash
+curl -X POST "https://client.myemailverifier.com/leads/search/YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"first_name": "Priya", "last_name": "Mehta", "company": "Infosys", "title": "Data Engineer"}'
+```
+
+### Reveal Contact
+
+**Required:** `email_token` — at least one of `email_token` or `phone_token` must be provided.  
+`phone_token` is optional — pass it alongside `email_token` to reveal both in one call.
+
+```bash
+# Email only
+curl -X POST "https://client.myemailverifier.com/leads/reveal/YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"email_token": "eyJ..."}'
+
+# Email + phone together (single call)
+curl -X POST "https://client.myemailverifier.com/leads/reveal/YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"email_token": "eyJ...", "phone_token": "eyJ..."}'
+```
+
+**Response (first reveal — 10 credits deducted):**
+```json
+{ "status": true, "email": "rahul.sharma@payfast.in", "phone": "+91 9876543210", "already_revealed": false, "credits_remaining": 4985 }
+```
+
+**Response (re-reveal — free, `already_revealed: true`):**
+```json
+{ "status": true, "email": "rahul.sharma@payfast.in", "phone": "+91 9876543210", "already_revealed": true, "credits_remaining": 4985 }
+```
+
+> **Token expiry:** Tokens are valid for 24 hours from the search. Re-reveal within 24 h is free — `already_revealed` will be `true` and no credits are deducted.
+
+---
+
 ## Support
 
 - **Documentation**: [https://github.com/myemailverifier/api](https://github.com/myemailverifier/api)
