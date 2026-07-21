@@ -5,6 +5,8 @@ Real-time email verification API to validate email addresses instantly and incre
 ## 🚀 Features
 
 - **Real-time Email Verification** - Verify emails instantly with 99.9% accuracy
+- **Lead Generation** - Find verified business emails from a prompt, a name + company, or a LinkedIn profile URL (emails confirmed deliverable before they're returned) — see [Lead Generation API](docs/LEAD_GENERATION_API.md)
+- **Deep Catch-All Check** - Individually score catch-all addresses that standard checks can't confirm — see [Deep Catch-All API](docs/DEEP_CATCHALL_API.md)
 - **Bulk Email Validation** - Upload CSV/TXT files for bulk verification
 - **Intelligent Caching** - Lightning-fast response times with smart caching system
 - **Catch-all Detection** - Identify catch-all email addresses
