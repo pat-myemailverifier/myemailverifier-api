@@ -172,8 +172,8 @@ curl "https://client.myemailverifier.com/verifier/file_info/YOUR_API_KEY/FILE_ID
 {
   "upload_id": "1669",
   "file_name": "test.xlsx",
-  "file_path": "https://client.myemailverifier.com/downloadreport/csv/FILE_ID",
-  "xls_file_path": "https://client.myemailverifier.com/downloadreport/xls/FILE_ID",
+  "file_path": "https://client.myemailverifier.com/download/csv/12345?expires=1795845308&signature=…",
+  "xls_file_path": "https://client.myemailverifier.com/download/xls/12345?expires=1795845308&signature=…",
   "created_at": "2019-09-09 00:17:23",
   "ready_for_download": "1",
   "valid": "27",

@@ -99,15 +99,15 @@ curl "https://client.myemailverifier.com/verifier/file_info/YOUR_API_KEY/1669"
       "Duplicate": 50
     },
 
-    "download_all_csv":      "https://client.myemailverifier.com/downloadreport/csv/...",
-    "download_valid_csv":    "https://client.myemailverifier.com/downloadreport/validcsv/...",
-    "download_invalid_csv":  "https://client.myemailverifier.com/downloadreport/invalidcsv/...",
-    "download_catchall_csv": "https://client.myemailverifier.com/downloadreport/catchallcsv/...",
-    "download_unknown_csv":  "https://client.myemailverifier.com/downloadreport/unknowncsv/...",
-    "download_xls":          "https://client.myemailverifier.com/downloadreport/xls/...",
+    "download_all_csv":      "https://client.myemailverifier.com/download/csv/12345?expires=1795845308&signature=…",
+    "download_valid_csv":    "https://client.myemailverifier.com/download/validcsv/12345?expires=1795845308&signature=…",
+    "download_invalid_csv":  "https://client.myemailverifier.com/download/invalidcsv/12345?expires=1795845308&signature=…",
+    "download_catchall_csv": "https://client.myemailverifier.com/download/catchallcsv/12345?expires=1795845308&signature=…",
+    "download_unknown_csv":  "https://client.myemailverifier.com/download/unknowncsv/12345?expires=1795845308&signature=…",
+    "download_xls":          "https://client.myemailverifier.com/download/xls/12345?expires=1795845308&signature=…",
 
-    "file_path":             "https://client.myemailverifier.com/downloadreport/csv/...",
-    "xls_file_path":         "https://client.myemailverifier.com/downloadreport/xls/..."
+    "file_path":             "https://client.myemailverifier.com/download/csv/12345?expires=1795845308&signature=…",
+    "xls_file_path":         "https://client.myemailverifier.com/download/xls/12345?expires=1795845308&signature=…"
   }
 }
 ```
@@ -203,6 +203,12 @@ All URLs are pre-built — no construction needed. Each is `null` if that catego
 | `xls_file_path`       | string \| null | Alias for `download_xls`. Backward-compatible — use either name. |
 
 > ⚠️ Only use download URLs when `downloadable === true`. URLs exist in the response regardless but files are not ready until then.
+
+> **Download links are signed.** Each link only opens the file and result type it was made for,
+> and is valid for 30 days (result files are deleted after 30 days). Use the URL exactly as
+> returned — a changed link stops working. Need a fresh link? Call `file_info` again; every call
+> returns new links. Older `/downloadreport/…` links keep working only for files uploaded before
+> this change (until those files are deleted).
 
 ---
 

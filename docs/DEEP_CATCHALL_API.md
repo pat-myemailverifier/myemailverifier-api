@@ -128,6 +128,9 @@ Returns your most recent batch jobs (same object shape as the status `data` abov
 |------|---------|---------|
 | 401 | `INVALID_API_KEY` | Key wrong or inactive |
 | 402 | `INSUFFICIENT_CREDITS` | Not enough credits (`credits_needed` + `credits_balance` included) |
+| 403 | `ACCOUNT_BLOCKED` | The account is blocked |
+| 403 | `PAYMENT_VERIFICATION_REQUIRED` | The account is on hold until a payment is verified |
+| 403 | `DEMO_KEY_NOT_ALLOWED` | The public demo key can't be used for this API — use your own API key |
 | 404 | `JOB_NOT_FOUND` | Unknown job id for this key |
 | 409 | `JOB_NOT_COMPLETE` | Download requested before the job finished |
 | 422 | `INVALID_EMAIL` / `NO_VALID_EMAILS` | Bad email / no valid emails in the file |

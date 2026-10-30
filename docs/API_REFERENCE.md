@@ -251,8 +251,8 @@ curl "https://client.myemailverifier.com/verifier/file_info/YOUR_API_KEY/1670"
 {
   "upload_id": "1670",
   "file_name": "emails.txt",
-  "file_path": "https://client.myemailverifier.com/downloadreport/csv/1670",
-  "xls_file_path": "https://client.myemailverifier.com/downloadreport/xls/1670",
+  "file_path": "https://client.myemailverifier.com/download/csv/1670?expires=1795845308&signature=…",
+  "xls_file_path": "https://client.myemailverifier.com/download/xls/1670?expires=1795845308&signature=…",
   "user_id": "26",
   "created_at": "2024-02-19 10:30:00",
   "ready_for_download": "1",
@@ -280,6 +280,12 @@ curl "https://client.myemailverifier.com/verifier/file_info/YOUR_API_KEY/1670"
 Once `ready_for_download` is `1` and `status` is `finished`:
 - **CSV Download:** Use the `file_path` URL
 - **Excel Download:** Use the `xls_file_path` URL
+
+> **Download links are signed.** Each link only opens the file and result type it was made for,
+> and is valid for 30 days (result files are deleted after 30 days). Use the URL exactly as
+> returned — a changed link stops working. Need a fresh link? Call `file_info` again; every call
+> returns new links. Older `/downloadreport/…` links keep working only for files uploaded before
+> this change (until those files are deleted).
 
 ---
 

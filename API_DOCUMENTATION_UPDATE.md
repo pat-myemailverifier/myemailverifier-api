@@ -116,8 +116,8 @@ Response:
 {
   "upload_id": "1670",
   "file_name": "emails.txt",
-  "file_path": "https://client.myemailverifier.com/downloadreport/csv/1670",
-  "xls_file_path": "https://client.myemailverifier.com/downloadreport/xls/1670",
+  "file_path": "https://client.myemailverifier.com/download/csv/1670?expires=1795845308&signature=…",
+  "xls_file_path": "https://client.myemailverifier.com/download/xls/1670?expires=1795845308&signature=…",
   "ready_for_download": "1",
   "valid": "850",
   "invalid": "120",

@@ -284,6 +284,9 @@ curl -X DELETE "https://client.myemailverifier.com/leads/saved/YOUR_API_KEY/91"
 |------|---------|---------|
 | 401 | `INVALID_API_KEY` | Key wrong or inactive |
 | 402 | `INSUFFICIENT_CREDITS` | Not enough credits (`credits_needed` + `credits_balance` included) |
+| 403 | `ACCOUNT_BLOCKED` | The account is blocked |
+| 403 | `PAYMENT_VERIFICATION_REQUIRED` | The account is on hold until a payment is verified |
+| 403 | `DEMO_KEY_NOT_ALLOWED` | The public demo key can't be used for this API (except the LinkedIn-URL demo on the website) — use your own API key |
 | 404 | `JOB_NOT_FOUND` / `NOT_FOUND` | Unknown job id / lead id for this key |
 | 422 | `INVALID_URL` | LinkedIn URL missing or not a profile URL |
 | 422 | `INVALID_TOKEN` / `MISSING_TOKEN` | Reveal token bad/expired, or none provided |

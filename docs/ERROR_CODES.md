@@ -170,7 +170,9 @@ The API returns a `Status` field with one of these values:
 **Meaning:** API key doesn't have permission
 **Causes:**
 - Referer restriction (demo keys)
-- Account suspended
+- Demo key used on the Deep Catch-All or Lead Generation API (`DEMO_KEY_NOT_ALLOWED`)
+- Account suspended (`ACCOUNT_BLOCKED` on the Deep Catch-All and Lead Generation APIs)
+- Account on hold until a payment is verified (`PAYMENT_VERIFICATION_REQUIRED`)
 - Feature not available on plan
 
 **Response Example:**
